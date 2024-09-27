@@ -1,13 +1,15 @@
 import 'dart:developer';
 
 import 'package:digitalsalt_assignment/res/app_colors/colors.dart';
+import 'package:digitalsalt_assignment/res/icons_asset/images.dart';
 import 'package:digitalsalt_assignment/utils/utils.dart';
 import 'package:digitalsalt_assignment/view/auth_screen/signup_page.dart';
 import 'package:digitalsalt_assignment/view/common_widgets/common_buttons.dart';
+import 'package:digitalsalt_assignment/view/common_widgets/common_popups.dart';
 import 'package:digitalsalt_assignment/view/common_widgets/custom_textfield.dart';
-import 'package:flutter/cupertino.dart';
+import 'package:digitalsalt_assignment/view/home/homepage.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:gap/gap.dart';
 import 'package:get/get.dart';
 
@@ -19,6 +21,7 @@ class LogInPage extends StatefulWidget {
 }
 
 class _LogInPageState extends State<LogInPage> {
+  // final authVM = Get.put(AuthViewModel());
   final _formKey = GlobalKey<FormState>();
 
   final TextEditingController _loginEmailController = TextEditingController();
@@ -127,7 +130,9 @@ class _LogInPageState extends State<LogInPage> {
               PrimaryButton(
                   onTap: () {
                     if (_formKey.currentState!.validate()) {
-                      Utils.snackBar('Success', 'Log In successfully');
+                      Get.to(() => const HomePage());
+                      showSuccessPopup(context);
+                      // Utils.snackBar('Success', 'Log In successfully');
                       log('Login account with email: ${_loginEmailController.text}');
                     }
                   },
@@ -169,21 +174,66 @@ class _LogInPageState extends State<LogInPage> {
                     ),
                   ),
                   const Gap(20),
-                  const Text("Or login with",style: TextStyle(fontSize: 12,fontWeight: FontWeight.w400,color: AppColor.ktxtsecondary),),
+                  const Text(
+                    "Or login with",
+                    style: TextStyle(
+                        fontSize: 12,
+                        fontWeight: FontWeight.w400,
+                        color: AppColor.ktxtsecondary),
+                  ),
                   const Gap(20),
-                   Expanded(
-                     child: Container(
+                  Expanded(
+                    child: Container(
                       height: 2,
                       width: Get.width,
                       color: AppColor.klightGrey,
-                                       ),
-                   ),
+                    ),
+                  ),
                 ],
-              )
+              ),
+              const Gap(20),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  GestureDetector(
+                    onTap: () async {
+                      // await authVM.signInWithGoogle();
+                    },
+                    child: SvgPicture.asset(
+                      IconAssets.googleIcon,
+                      fit: BoxFit.contain,
+                    ),
+                  ),
+                  const Gap(30),
+                  GestureDetector(
+                    onTap: () {},
+                    child: SvgPicture.asset(
+                      IconAssets.fbIcon,
+                      fit: BoxFit.contain,
+                    ),
+                  ),
+                ],
+              ),
             ],
           ),
         ),
       ),
+    );
+  }
+
+  void showSuccessPopup(BuildContext context) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return SuccessPopup(
+          message: "Congratulations, you have\ncompleted your registration!",
+          title: "Success",
+          buttonText: 'Done',
+          onButtonPressed: () {
+            Navigator.of(context).pop();
+          },
+        );
+      },
     );
   }
 }

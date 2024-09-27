@@ -1,5 +1,6 @@
 import 'package:digitalsalt_assignment/res/app_colors/colors.dart';
 import 'package:digitalsalt_assignment/res/icons_asset/images.dart';
+import 'package:digitalsalt_assignment/view/auth_screen/login_page.dart';
 import 'package:digitalsalt_assignment/view/auth_screen/signup_page.dart';
 import 'package:digitalsalt_assignment/view/common_widgets/common_buttons.dart';
 import 'package:flutter/material.dart';
@@ -56,7 +57,9 @@ class _SplashScreenState extends State<SplashScreen> {
                 ),
                 const Gap(16),
                 Expanded(
-                    child: SecondaryButton(onTap: () {}, title: 'Log in'))
+                    child: SecondaryButton(onTap: () {
+                        Get.to(()=> const LogInPage());
+                    }, title: 'Log in'))
               ],
             ),
             const Gap(20),
