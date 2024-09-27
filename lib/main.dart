@@ -1,5 +1,7 @@
-import 'package:digitalsalt_assignment/homepage.dart';
+import 'package:digitalsalt_assignment/res/app_colors/colors.dart';
+import 'package:digitalsalt_assignment/view/auth_screen/splash_screen.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 
 void main() {
   runApp(const MyApp());
@@ -10,14 +12,16 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
+    return GetMaterialApp(
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
       fontFamily: 'Poppins',
+      scaffoldBackgroundColor: AppColor.kwhite,
+      appBarTheme: const AppBarTheme(color: AppColor.kwhite,centerTitle: true),
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
         useMaterial3: true,
       ),
-      home: const HomePage(),
+      home: const SplashScreen(),
     );
   }
 }

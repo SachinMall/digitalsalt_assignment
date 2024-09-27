@@ -11,5 +11,5 @@ class ImageAssets {
 // for Icons
 class IconAssets {
   static const _base = BasePaths.baseIconPath;
-  static const loginstar = '$_base/login_star.png';
+  static const splashScreenIcon = '$_base/splash.svg';
 }

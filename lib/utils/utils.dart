@@ -13,8 +13,8 @@ class Utils {
   static toastMessage(String message) {
     Fluttertoast.showToast(
       msg: message,
-      backgroundColor: AppColor.lightpurple,
-      textColor: AppColor.kblack,
+      backgroundColor: Colors.red.withOpacity(0.7),
+      textColor: AppColor.kwhite,
       gravity: ToastGravity.BOTTOM,
       toastLength: Toast.LENGTH_LONG,
       
@@ -24,7 +24,7 @@ class Utils {
   static toastMessageCenter(String message) {
     Fluttertoast.showToast(
       msg: message,
-      backgroundColor: AppColor.kblack,
+      backgroundColor: AppColor.kprimaryColor.withOpacity(0.7),
       gravity: ToastGravity.CENTER,
       toastLength: Toast.LENGTH_LONG,
       textColor: AppColor.kwhite,
@@ -32,11 +32,7 @@ class Utils {
   }
 
   static snackBar(String title, String message) {
-    Get.snackbar(title, message, backgroundColor: AppColor.lightpurple);
+    Get.snackbar(title, message, backgroundColor: AppColor.kprimaryColor.withOpacity(0.7),colorText: AppColor.kwhite);
   }
 
-  static String metersToKilometers(double meters) {
-    double kilometers = meters % 1000;
-    return kilometers.toStringAsFixed(2); // Limiting to 2 decimal places
-  }
 }
