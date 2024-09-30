@@ -13,16 +13,7 @@ class NetworkApiServices extends BaseApiServices {
   @override
   Future<dynamic> getGetApiResponse(String url) async {
     log(" url: $url");
-    // Map<String, String> header = {};    //! for token to use in the header
-    // String token = await userPreference.getAuthToken();
-    // if (url.contains('generateotp') || url.contains('verifyotp')) {
-    //   header = {'Content-Type': 'application/json'};
-    // } else {
-    //   header = {
-    //     'Content-Type': 'application/json',
-    //     'Authorization': 'Bearer $token'
-    //   };
-    // }
+
     dynamic responseJson;
     try {
       final response =
@@ -50,24 +41,15 @@ class NetworkApiServices extends BaseApiServices {
   }
 
   @override
-  Future getPostApiResponse(payload, String url) async {
+  Future getPostApiResponse(data, String url) async {
     dynamic jsonResponse;
     Map<String, String> header = {'Content-Type': 'application/json'};
-    // String token = await userPreference.getAuthToken(); //! for token to use in the header
-    // if (url.contains('generateotp') || url.contains('verifyotp')) {
-    //   header = {'Content-Type': 'application/json'};
-    // } else {
-    //   header = {
-    //     'Content-Type': 'application/json',
-    //     'Authorization': 'Bearer $token'
-    //   };
-    // }
 
     log('🔗 URL::=>  $url \n 👀header:: ${json.encode(header)}');
-    log('📦 Payload ::=> ${json.encode(payload)}');
+    log('📦 Payload ::=> ${json.encode(data)}');
     try {
       final response = await client.post(Uri.parse(url),
-          body: json.encode(payload), headers: header);
+          body: json.encode(data), headers: header);
 
       if (kDebugMode) {
         log("status code::${response.statusCode}");
@@ -92,22 +74,4 @@ class NetworkApiServices extends BaseApiServices {
     }
   }
 
-//! alternate option to throw the error from the api
-  // dynamic returnResponse(http.Response response) {
-  //   switch (response.statusCode) {
-  //     case 200:
-  //       dynamic responseJson = jsonDecode(response.body);
-  //       return responseJson;
-  //     case 400:
-  //       throw BadRequestException(response.body.toString());
-  //     case 404:
-  //       throw UnAuthorisedException(response.body.toString());
-  //     case 500:
-  //     default:
-  //       throw FetchDataExceptions(
-  //           'Error occured while communicating with the server' +
-  //               'with status code' +
-  //               response.statusCode.toString());
-  //   }
-  // }
 }

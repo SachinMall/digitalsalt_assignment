@@ -1,13 +1,13 @@
 import 'package:digitalsalt_assignment/res/app_colors/colors.dart';
 import 'package:digitalsalt_assignment/res/icons_asset/images.dart';
 import 'package:digitalsalt_assignment/view/common_widgets/custom_textfield.dart';
-import 'package:flutter/cupertino.dart';
+import 'package:digitalsalt_assignment/view_model/controller/courses_view_model.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:flutter_bounceable/flutter_bounceable.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:gap/gap.dart';
 import 'package:get/get.dart';
+import 'package:skeletonizer/skeletonizer.dart';
 
 class CoursePage extends StatefulWidget {
   const CoursePage({super.key});
@@ -17,9 +17,18 @@ class CoursePage extends StatefulWidget {
 }
 
 class _CoursePageState extends State<CoursePage> {
+  final CourseViewModel controller = Get.put(CourseViewModel());
+
+  @override
+  void initState() {
+    super.initState();
+    controller.getCourseListData();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: AppColor.kwhite,
       body: SafeArea(
         child: Column(
           children: [
@@ -96,7 +105,34 @@ class _CoursePageState extends State<CoursePage> {
                           color: AppColor.ktxtprimary),
                     ),
                     const Gap(14),
-                   const SelectableCategoryRow(),
+                    const SelectableCategoryRow(),
+                    const Gap(20),
+                     Obx(
+                      () => Skeletonizer(
+                        enabled: controller.courseListLoading.value,
+                        child: controller.courseList.isEmpty
+                            ? const Center(
+                                child: Text("No data"),
+                              )
+                            : SizedBox(
+                                height: Get.height,
+                                child: ListView.builder(
+                                  itemCount: controller.courseListLoading.value
+                                      ? 5
+                                      : controller.courseList.length,
+                                  shrinkWrap: true,
+                                  physics: const NeverScrollableScrollPhysics(),
+                                  itemBuilder: (context, index) {
+                                    final course = controller.courseListLoading.value
+                                        ? null
+                                        : controller.courseList[index];
+                                    return CourseListItem(course: course);
+                                  },
+                                ),
+                              ),
+                      ),
+                    ),
+                    const Gap(30),
                   ],
                 ),
               ),
@@ -155,7 +191,6 @@ class _CoursePageState extends State<CoursePage> {
       ],
     );
   }
-  
 }
 
 class SelectableCategoryRow extends StatefulWidget {
@@ -203,8 +238,98 @@ class _SelectableCategoryRowState extends State<SelectableCategoryRow> {
           style: TextStyle(
             fontSize: 14,
             color: isSelected ? Colors.white : AppColor.ktxtsecondary,
-            fontWeight:FontWeight.w400 ,
+            fontWeight: FontWeight.w400,
           ),
+        ),
+      ),
+    );
+  }
+}
+
+
+class CourseListItem extends StatelessWidget {
+  final dynamic course;
+
+  const CourseListItem({Key? key, this.course}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      padding: const EdgeInsets.all(12),
+      margin: const EdgeInsets.only(bottom: 12),
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(16),
+        color: AppColor.kwhite,
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withOpacity(0.1),
+            blurRadius: 10,
+            offset: const Offset(0, 5),
+          ),
+        ],
+      ),
+      child: ListTile(
+        leading: Image.network(
+          course?.imageUrl ?? 'https://placeholder.com/70x90',
+          height: 90,
+          width: 70,
+          fit: BoxFit.fill,
+        ),
+        title: Text(
+          course?.courseName ?? 'Course Name',
+          style: const TextStyle(
+            fontSize: 14,
+            fontWeight: FontWeight.w500,
+            color: AppColor.ktxtprimary,
+          ),
+        ),
+        subtitle: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Row(
+              children: [
+                const Icon(Icons.person, color: AppColor.klightGrey, size: 16),
+                const Gap(2),
+                Text(
+                  course?.instructor ?? 'Instructor Name',
+                  style: const TextStyle(
+                    fontSize: 12,
+                    fontWeight: FontWeight.w400,
+                    color: AppColor.klightGrey,
+                  ),
+                ),
+              ],
+            ),
+            const Gap(8),
+            Row(
+              children: [
+                Text(
+                  course?.price ?? '\$XX.XX',
+                  style: const TextStyle(
+                    fontSize: 16,
+                    fontWeight: FontWeight.w700,
+                    color: AppColor.kprimaryColor,
+                  ),
+                ),
+                const Gap(5),
+                Container(
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(16),
+                    color: AppColor.klightorangeColor,
+                  ),
+                  padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
+                  child: Text(
+                    course?.duration ?? 'X weeks',
+                    style: const TextStyle(
+                      fontSize: 10,
+                      fontWeight: FontWeight.w400,
+                      color: AppColor.korangeColor,
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ],
         ),
       ),
     );

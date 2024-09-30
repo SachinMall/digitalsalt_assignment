@@ -12,6 +12,7 @@ class AppColor {
  static const Color klightGrey2 = Color(0xffF4F3FD);
  static const Color klinearProgressColor = Color(0xffFF5106);
  static const Color korangeColor = Color(0xffFF6905);
+ static const Color klightorangeColor = Color(0xffFFEBF0);
  static const Color klightPinkColor = Color(0xffEFE0FF);
  static const Color kdarkBlueColor = Color(0xff440687);
  static const Color klightpurpleColor = Color(0xff9065BE);
