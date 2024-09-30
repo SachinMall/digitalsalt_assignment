@@ -55,6 +55,7 @@ class _RootPageState extends State<RootPage> {
   @override
   Widget build(BuildContext context) {
   return Scaffold(
+    resizeToAvoidBottomInset: false,
     body: PageTransitionSwitcher(
       transitionBuilder: (child, primaryAnimation, secondaryAnimation) =>
           FadeThroughTransition(
@@ -90,7 +91,7 @@ class _RootPageState extends State<RootPage> {
           child: BottomNavigationBar(
             backgroundColor: AppColor.kwhite,
             elevation: 0,
-            
+            selectedItemColor: AppColor.kprimaryColor,
             selectedLabelStyle: const TextStyle(
               fontSize: 12,
               fontWeight: FontWeight.w500,

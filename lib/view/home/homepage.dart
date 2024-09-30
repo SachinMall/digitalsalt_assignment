@@ -38,6 +38,7 @@ class _HomePageState extends State<HomePage> {
                       mainAxisAlignment: MainAxisAlignment.start,
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
+                        const Gap(10),
                         Row(
                           children: [
                             const Text(

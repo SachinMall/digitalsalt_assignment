@@ -7,6 +7,9 @@ class ImageAssets {
   static const profileAvatar = '$_base/profile_avatar.svg';
   static const carsouleImage1 = '$_base/slider1.svg';
   static const meetingBanner = '$_base/meeting_banner.svg';
+  static const course1 = '$_base/course_1.svg';
+  static const course2 = '$_base/course_2.svg';
+
   
 }
 
@@ -23,4 +26,5 @@ class IconAssets {
   static const searchActiveIcon = '$_base/search.svg';
   static const messageInactiveIcon = '$_base/message.svg';
   static const accountInactiveIcon = '$_base/account.svg';
+  static const filterIcon = '$_base/filter.svg';
 }

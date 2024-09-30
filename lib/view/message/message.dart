@@ -11,6 +11,12 @@ class MessagePage extends StatefulWidget {
 class _MessagePageState extends State<MessagePage> {
   @override
   Widget build(BuildContext context) {
-    return const Scaffold();
+    return  Scaffold(
+       appBar: AppBar(
+        automaticallyImplyLeading: false,
+
+       ),
+      body: const Center(child: Text("Coming Soon"),),
+    );
   }
 }

@@ -1,5 +1,4 @@
 import 'dart:developer';
-
 import 'package:digitalsalt_assignment/res/app_colors/colors.dart';
 import 'package:digitalsalt_assignment/res/icons_asset/images.dart';
 import 'package:digitalsalt_assignment/utils/utils.dart';
@@ -7,7 +6,6 @@ import 'package:digitalsalt_assignment/view/auth_screen/signup_page.dart';
 import 'package:digitalsalt_assignment/view/common_widgets/common_buttons.dart';
 import 'package:digitalsalt_assignment/view/common_widgets/common_popups.dart';
 import 'package:digitalsalt_assignment/view/common_widgets/custom_textfield.dart';
-import 'package:digitalsalt_assignment/view/home/homepage.dart';
 import 'package:digitalsalt_assignment/view/rootpage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';

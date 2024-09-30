@@ -33,7 +33,6 @@ class CustomInputField extends StatelessWidget {
   final bool isEditIcon;
   final void Function()? onEditTap;
   final List<TextInputFormatter>? inputFormatter;
-  final bool isStyle;
 
   const CustomInputField({
     super.key,
@@ -63,8 +62,7 @@ class CustomInputField extends StatelessWidget {
     this.hintstyle,
     this.isEditIcon = false,
     this.onEditTap,
-    this.inputFormatter,
-    this.isStyle = false, this.focusNode,
+    this.inputFormatter,this.focusNode,
   });
 
   // late TextEditingController _controller;

@@ -11,6 +11,12 @@ class SearchPage extends StatefulWidget {
 class _SearchPageState extends State<SearchPage> {
   @override
   Widget build(BuildContext context) {
-    return const Scaffold();
+    return  Scaffold(
+       appBar: AppBar(
+        automaticallyImplyLeading: false,
+
+       ),
+      body: const Center(child: Text("Coming Soon"),),
+    );
   }
 }
