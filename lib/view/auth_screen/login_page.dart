@@ -8,6 +8,7 @@ import 'package:digitalsalt_assignment/view/common_widgets/common_buttons.dart';
 import 'package:digitalsalt_assignment/view/common_widgets/common_popups.dart';
 import 'package:digitalsalt_assignment/view/common_widgets/custom_textfield.dart';
 import 'package:digitalsalt_assignment/view/home/homepage.dart';
+import 'package:digitalsalt_assignment/view/rootpage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:gap/gap.dart';
@@ -130,7 +131,7 @@ class _LogInPageState extends State<LogInPage> {
               PrimaryButton(
                   onTap: () {
                     if (_formKey.currentState!.validate()) {
-                      Get.to(() => const HomePage());
+                      Get.to(() => const RootPage());
                       showSuccessPopup(context);
                       // Utils.snackBar('Success', 'Log In successfully');
                       log('Login account with email: ${_loginEmailController.text}');
