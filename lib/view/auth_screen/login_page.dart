@@ -9,7 +9,6 @@ import 'package:digitalsalt_assignment/view/common_widgets/common_popups.dart';
 import 'package:digitalsalt_assignment/view/common_widgets/custom_textfield.dart';
 import 'package:digitalsalt_assignment/view/rootpage.dart';
 import 'package:digitalsalt_assignment/view_model/auth_view_model.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:gap/gap.dart';
@@ -251,30 +250,5 @@ class _LogInPageState extends State<LogInPage> {
         );
       },
     );
-  }
-
-  Future<UserModel?> signInWithEmailPassword(
-      String email, String password) async {
-    try {
-      UserCredential userCredential =
-          await FirebaseAuth.instance.signInWithEmailAndPassword(
-        email: email,
-        password: password,
-      );
-
-      User? user = userCredential.user;
-      if (user != null) {
-        return UserModel(
-          email: user.email ?? '',
-          firstName: '',
-          lastName: '',
-        );
-      }
-    } on FirebaseAuthException catch (e) {
-      log('Error signing in: $e');
-
-      Utils.toastMessage(e.message ?? 'Login failed');
-    }
-    return null;
   }
 }

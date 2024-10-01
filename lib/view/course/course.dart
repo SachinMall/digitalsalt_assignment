@@ -1,7 +1,7 @@
 import 'package:digitalsalt_assignment/res/app_colors/colors.dart';
 import 'package:digitalsalt_assignment/res/icons_asset/images.dart';
 import 'package:digitalsalt_assignment/view/common_widgets/custom_textfield.dart';
-import 'package:digitalsalt_assignment/view/course/search_result_page.dart';
+import 'package:digitalsalt_assignment/view/search/search_result_page.dart';
 import 'package:digitalsalt_assignment/view_model/controller/courses_view_model.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bounceable/flutter_bounceable.dart';
@@ -274,7 +274,7 @@ class CourseListItem extends StatelessWidget {
         boxShadow: [
           BoxShadow(
             color: Colors.black.withOpacity(0.1),
-            blurRadius: 10,
+            blurRadius: 6,
             blurStyle: BlurStyle.outer,
             offset: const Offset(0, 5),
           ),

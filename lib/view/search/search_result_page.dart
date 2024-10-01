@@ -43,13 +43,16 @@ class _SearchResultsPageState extends State<SearchResultsPage> {
           enabled: widget.controller.courseListLoading.value,
           child: widget.controller.filteredCourseList.isEmpty
               ? const Center(child: Text("No data"))
-              : ListView.builder(
-                  itemCount: widget.controller.filteredCourseList.length,
-                  itemBuilder: (context, index) {
-                    final course = widget.controller.filteredCourseList[index];
-                    return CourseListItem(course: course);
-                  },
-                ),
+              : Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 20),
+                child: ListView.builder(
+                    itemCount: widget.controller.filteredCourseList.length,
+                    itemBuilder: (context, index) {
+                      final course = widget.controller.filteredCourseList[index];
+                      return CourseListItem(course: course);
+                    },
+                  ),
+              ),
         ),
       ),
     );

@@ -3,7 +3,7 @@ import 'package:digitalsalt_assignment/res/app_colors/colors.dart';
 import 'package:digitalsalt_assignment/res/icons_asset/images.dart';
 import 'package:digitalsalt_assignment/view/account/account.dart';
 import 'package:digitalsalt_assignment/view/course/course.dart';
-import 'package:digitalsalt_assignment/view/course/search_result_page.dart';
+import 'package:digitalsalt_assignment/view/search/search_result_page.dart';
 import 'package:digitalsalt_assignment/view/home/homepage.dart';
 import 'package:digitalsalt_assignment/view/message/message.dart';
 import 'package:digitalsalt_assignment/view_model/controller/courses_view_model.dart';

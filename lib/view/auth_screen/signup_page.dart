@@ -114,7 +114,7 @@ class _SignUpPageState extends State<SignUpPage> {
                       fontWeight: FontWeight.w400,
                       color: AppColor.klightGrey),
                 ),
-                const Gap(10),
+                const Gap(30),
                   CustomInputField(
                     textController: _signUpFirstNameController,
                     focusNode: _signUpFirstNameFocusNode,

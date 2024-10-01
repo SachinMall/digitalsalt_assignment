@@ -56,7 +56,7 @@ class AuthViewModel extends GetxController {
       }
     } on FirebaseAuthException catch (e) {
       log('Error signing in: $e');
-      Utils.toastMessage(e.message ?? 'Login failed');
+      Utils.toastMessage('Login failed');
     }
     return null;
   }
