@@ -1,12 +1,14 @@
+import 'dart:developer';
+
+import 'package:digitalsalt_assignment/model/user_mode.dart';
 import 'package:digitalsalt_assignment/res/app_colors/colors.dart';
 import 'package:digitalsalt_assignment/res/icons_asset/images.dart';
-import 'package:flutter/cupertino.dart';
+import 'package:digitalsalt_assignment/view/home/course_progress.dart';
+import 'package:digitalsalt_assignment/view_model/controller/courses_view_model.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:gap/gap.dart';
 import 'package:get/get.dart';
-import 'package:get/get_core/get_core.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -16,8 +18,19 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
+  final CourseViewModel courseVM = Get.put(CourseViewModel());
+var userModel = UserModel();
+
+  @override
+  void initState() {
+    super.initState();
+    courseVM.getCourseListData();
+  }
+
+
   @override
   Widget build(BuildContext context) {
+    log("first Name :::=> ${userModel.firstName.toString()}");
     return Scaffold(
       body: SafeArea(
           child: SingleChildScrollView(
@@ -135,249 +148,67 @@ class _HomePageState extends State<HomePage> {
                                 color: AppColor.ktxtprimary),
                           ),
                         ),
-                        const LearningPlanWidget(),
+                        // const LearningPlanWidget(),
                         const Gap(15),
-                        Container(
-                          width: Get.width,
-                          padding: const EdgeInsets.all(16),
-                          margin: const EdgeInsets.symmetric(horizontal: 16),
-                          decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(16),
-                              color: AppColor.klightPinkColor),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              const Column(
-                                mainAxisAlignment: MainAxisAlignment.start,
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Text(
-                                    'Meetup',
-                                    style: TextStyle(
-                                        fontSize: 25,
-                                        fontWeight: FontWeight.w500,
-                                        color: AppColor.kdarkBlueColor),
-                                  ),
-                                  Gap(5),
-                                  Text(
-                                    'Off-line exchange of learning\nexperiences',
-                                    style: TextStyle(
-                                        fontSize: 12,
-                                        fontWeight: FontWeight.w400,
-                                        color: AppColor.kdarkBlueColor),
-                                  ),
-                                ],
-                              ),
-                              SvgPicture.asset(ImageAssets.meetingBanner)
-                            ],
-                          ),
-                        ),
+                        _buildMeetupCard(),
+                          const Gap(15),
+                          
                       ],
                     ),
                   ),
                 ],
               ),
+              
             ),
             Positioned(
               top: Get.height * .15,
               left: 16,
               right: 16,
-              child: const LearnedTodayViewWIdget(),
+              child:  const LearnedTodayViewWIdget(),
             ),
           ],
         ),
       )),
     );
   }
-}
 
-class LearnedTodayViewWIdget extends StatelessWidget {
-  const LearnedTodayViewWIdget({
-    super.key,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      padding: const EdgeInsets.all(20),
-      decoration: BoxDecoration(
-        color: AppColor.kwhite,
-        borderRadius: BorderRadius.circular(16),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black.withOpacity(0.1),
-            blurRadius: 10,
-            offset: const Offset(0, 5),
-          ),
-        ],
-      ),
-      child: Column(
-        children: [
-          const Row(
-            children: [
-              Text(
-                "Learned today",
-                style: TextStyle(
-                  fontSize: 12,
-                  fontWeight: FontWeight.w400,
-                  color: AppColor.ktxtsecondary,
-                ),
-              ),
-              Spacer(),
-              Text(
-                "My courses",
-                style: TextStyle(
-                  fontSize: 12,
-                  fontWeight: FontWeight.w400,
-                  color: AppColor.kprimaryColor,
-                ),
-              ),
-            ],
-          ),
-          const Gap(2),
-          const Row(
-            children: [
-              Text(
-                "46min",
-                style: TextStyle(
-                  fontSize: 20,
-                  fontWeight: FontWeight.w700,
-                  color: AppColor.ktxtprimary,
-                ),
-              ),
-              Text(
-                " / 60min",
-                style: TextStyle(
-                  fontSize: 10,
-                  fontWeight: FontWeight.w400,
-                  color: AppColor.ktxtsecondary,
-                ),
-              ),
-            ],
-          ),
-          const Gap(4),
-          SizedBox(
-            height: 6,
-            child: LinearProgressIndicator(
-              value: 46 / 60,
-              borderRadius: BorderRadius.circular(10),
-              backgroundColor: AppColor.klightGrey2,
-              valueColor:
-                  const AlwaysStoppedAnimation<Color>(AppColor.kprimaryColor),
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-}
-
-class LearningPlanWidget extends StatelessWidget {
-  const LearningPlanWidget({
-    super.key,
-  });
-
-  @override
-  Widget build(BuildContext context) {
+    Widget _buildMeetupCard() {
     return Container(
       width: Get.width,
+      padding: const EdgeInsets.all(16),
       margin: const EdgeInsets.symmetric(horizontal: 16),
-      padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 26),
       decoration: BoxDecoration(
-        color: AppColor.kwhite,
-        borderRadius: BorderRadius.circular(12),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black.withOpacity(0.1),
-            blurRadius: 10,
-            offset: const Offset(0, 5),
-          ),
-        ],
+        borderRadius: BorderRadius.circular(16),
+        color: AppColor.klightPinkColor,
       ),
-      child: Column(
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          Row(
+          const Column(
+            mainAxisAlignment: MainAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              const SizedBox(
-                width: 18,
-                height: 18,
-                child: CircularProgressIndicator(
-                  value: 40 / 48,
-                  strokeWidth: 4,
-                  backgroundColor: AppColor.klightGrey2,
-                  valueColor: AlwaysStoppedAnimation(AppColor.kdarkgrey),
-                ),
-              ),
-              const Gap(14),
-              const Text(
-                'Packaging Design',
+              Text(
+                'Meetup',
                 style: TextStyle(
+                    fontSize: 25,
                     fontWeight: FontWeight.w500,
-                    color: AppColor.ktxtprimary,
-                    fontSize: 14),
+                    color: AppColor.kdarkBlueColor),
               ),
-              const Spacer(),
-              RichText(
-                text: const TextSpan(
-                    text: '40',
-                    style: TextStyle(
-                        fontSize: 14,
-                        fontWeight: FontWeight.w400,
-                        color: AppColor.ktxtprimary),
-                    children: [
-                      TextSpan(
-                          text: '/48',
-                          style: TextStyle(
-                              fontSize: 14,
-                              fontWeight: FontWeight.w400,
-                              color: AppColor.ktxtsecondary))
-                    ]),
+              Gap(5),
+              Text(
+                'Off-line exchange of learning\nexperiences',
+                style: TextStyle(
+                    fontSize: 12,
+                    fontWeight: FontWeight.w400,
+                    color: AppColor.kdarkBlueColor),
               ),
             ],
           ),
-          const Gap(20),
-          Row(
-            children: [
-              const SizedBox(
-                width: 18,
-                height: 18,
-                child: CircularProgressIndicator(
-                  value: 18 / 48,
-                  strokeWidth: 4,
-                  backgroundColor: AppColor.klightGrey2,
-                  valueColor: AlwaysStoppedAnimation(AppColor.kdarkgrey),
-                ),
-              ),
-              const Gap(14),
-              const Text(
-                'Product Design',
-                style: TextStyle(
-                    fontWeight: FontWeight.w500,
-                    color: AppColor.ktxtprimary,
-                    fontSize: 14),
-              ),
-              const Spacer(),
-              RichText(
-                text: const TextSpan(
-                    text: '6',
-                    style: TextStyle(
-                        fontSize: 14,
-                        fontWeight: FontWeight.w400,
-                        color: AppColor.ktxtprimary),
-                    children: [
-                      TextSpan(
-                          text: '/24',
-                          style: TextStyle(
-                              fontSize: 14,
-                              fontWeight: FontWeight.w400,
-                              color: AppColor.ktxtsecondary))
-                    ],
-                    ),
-              ),
-            ],
-          ),
+          SvgPicture.asset(ImageAssets.meetingBanner),
         ],
       ),
     );
   }
+
 }

@@ -125,7 +125,6 @@ class CustomInputField extends StatelessWidget {
             suffixIcon: isSuffixIcon,
             hintText: hintText,
             hintStyle:   TextStyle(color: AppColor.ktxtsecondary.withOpacity(.5),fontWeight: FontWeight.w400,fontSize: 12),
-             
             border: OutlineInputBorder(
               borderSide:  const BorderSide(
                 color: Colors.transparent,

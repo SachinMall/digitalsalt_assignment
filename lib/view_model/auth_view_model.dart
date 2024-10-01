@@ -1,46 +1,84 @@
 import 'dart:developer';
-
+import 'package:digitalsalt_assignment/model/user_mode.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:get/get.dart';
+import 'package:digitalsalt_assignment/utils/utils.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 
 class AuthViewModel extends GetxController {
-  final GoogleSignIn googleSignIn = GoogleSignIn();
-  final _auth = FirebaseAuth.instance;
+  final FirebaseAuth _auth = FirebaseAuth.instance;
+    final GoogleSignIn _googleSignIn = GoogleSignIn();
 
-  Future<void> signInWithGoogle() async {
+
+// firebase google sigin fn
+ Future<UserModel?> signInWithGoogle() async {
     try {
-      log("Starting Google sign-in");
+      final GoogleSignInAccount? googleUser = await _googleSignIn.signIn();
+      final GoogleSignInAuthentication? googleAuth = await googleUser?.authentication;
 
-      final GoogleSignInAccount? googleSignInAccount =
-          await googleSignIn.signIn();
-      log("Google account selected");
+      final credential = GoogleAuthProvider.credential(
+        accessToken: googleAuth?.accessToken,
+        idToken: googleAuth?.idToken,
+      );
 
-      if (googleSignInAccount != null) {
-        final GoogleSignInAuthentication googleSignInAuthentication =
-            await googleSignInAccount.authentication;
+      UserCredential userCredential = await _auth.signInWithCredential(credential);
+      User? user = userCredential.user;
 
-        // getting auth credentials
-        final AuthCredential authCredential = GoogleAuthProvider.credential(
-          accessToken: googleSignInAuthentication.accessToken,
-          idToken: googleSignInAuthentication.idToken,
+      if (user != null) {
+        return UserModel(
+          email: user.email ?? '',
+          firstName: user.displayName ?? '',
+          lastName: '',
         );
+      }
+    } catch (e) {
+      log('Error signing in with Google: $e');
+      Utils.toastMessage('Google Sign-In failed');
+    }
+    return null;
+  }
 
-        // signing in with the obtained credentials
-        await _auth.signInWithCredential(authCredential).then((value) async {
-          log("Sign-in successful!");
-          log("User Email: ${value.additionalUserInfo!.profile!["email"]}");
-          log("User Name: ${value.additionalUserInfo!.profile!["name"]}");
+// firebase sign In with email
+  Future<UserModel?> signInWithEmailPassword(String email, String password) async {
+    try {
+      UserCredential userCredential = await _auth.signInWithEmailAndPassword(
+        email: email,
+        password: password,
+      );
 
-          final email = value.additionalUserInfo!.profile!["email"].toString();
-          final name = value.additionalUserInfo!.profile!["name"].toString();
-
-          // You can add your post-login logic here
-        });
+      User? user = userCredential.user;
+      if (user != null) {
+        return UserModel(
+          email: user.email ?? '',
+          firstName: '',
+          lastName: '',
+        );
       }
     } on FirebaseAuthException catch (e) {
-      // error handling
-      log("Google Sign-in Error: ${e.message}");
+      log('Error signing in: $e');
+      Utils.toastMessage(e.message ?? 'Login failed');
     }
+    return null;
   }
+
+// firebase signup fn
+  Future<UserCredential?> signUpWithEmailPassword(String email, String password) async {
+    try {
+      UserCredential userCredential = await _auth.createUserWithEmailAndPassword(
+        email: email,
+        password: password,
+      );
+      return userCredential;
+    } on FirebaseAuthException catch (e) {
+      log('Error signing up: $e');
+      Utils.toastMessage(e.message ?? 'Sign up failed');
+    }
+    return null;
+  }
+
+// signOut fn
+   Future<void> signOut() async {
+    await _auth.signOut();
+  }
+
 }

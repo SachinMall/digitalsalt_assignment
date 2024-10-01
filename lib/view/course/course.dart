@@ -1,6 +1,7 @@
 import 'package:digitalsalt_assignment/res/app_colors/colors.dart';
 import 'package:digitalsalt_assignment/res/icons_asset/images.dart';
 import 'package:digitalsalt_assignment/view/common_widgets/custom_textfield.dart';
+import 'package:digitalsalt_assignment/view/course/search_result_page.dart';
 import 'package:digitalsalt_assignment/view_model/controller/courses_view_model.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bounceable/flutter_bounceable.dart';
@@ -17,12 +18,12 @@ class CoursePage extends StatefulWidget {
 }
 
 class _CoursePageState extends State<CoursePage> {
-  final CourseViewModel controller = Get.put(CourseViewModel());
+  final CourseViewModel courseVM = Get.put(CourseViewModel());
 
   @override
   void initState() {
     super.initState();
-    controller.getCourseListData();
+    courseVM.getCourseListData();
   }
 
   @override
@@ -56,23 +57,33 @@ class _CoursePageState extends State<CoursePage> {
                   mainAxisAlignment: MainAxisAlignment.start,
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    CustomInputField(
-                      onChanged: (p0) {},
-                      textInputType: TextInputType.text,
-                      title: '',
-                      validator: (p0) {
-                        return null;
+                    GestureDetector(
+                      onTap: () {
                       },
-                      fillColor: AppColor.klightGrey2,
-                      hintText: 'Find Cousre',
-                      isSuffixIcon: SvgPicture.asset(IconAssets.filterIcon,
-                          fit: BoxFit.scaleDown),
-                      prefixIcon: const Icon(Icons.search_rounded,
-                          color: AppColor.klightGrey),
-                      hintstyle: const TextStyle(
-                          fontSize: 14,
-                          fontWeight: FontWeight.w400,
-                          color: AppColor.klightGrey),
+                      child: CustomInputField(
+                        onChanged: (value) {
+                          // controller.onSearch(value);
+                        },
+                        onTap: () {
+                                                Get.to(() => SearchResultsPage(controller: courseVM)); 
+                          
+                        },
+                        textInputType: TextInputType.text,
+                        title: '',
+                        validator: (p0) {
+                          return null;
+                        },
+                        fillColor: AppColor.klightGrey2,
+                        hintText: 'Find Cousre',
+                        isSuffixIcon: SvgPicture.asset(IconAssets.filterIcon,
+                            fit: BoxFit.scaleDown),
+                        prefixIcon: const Icon(Icons.search_rounded,
+                            color: AppColor.klightGrey),
+                        hintstyle: const TextStyle(
+                            fontSize: 14,
+                            fontWeight: FontWeight.w400,
+                            color: AppColor.klightGrey),
+                      ),
                     ),
                     const Gap(35),
                     Row(
@@ -109,26 +120,22 @@ class _CoursePageState extends State<CoursePage> {
                     const Gap(20),
                      Obx(
                       () => Skeletonizer(
-                        enabled: controller.courseListLoading.value,
-                        child: controller.courseList.isEmpty
+                        enabled: courseVM.courseListLoading.value,
+                        child: courseVM.courseList.isEmpty
                             ? const Center(
                                 child: Text("No data"),
                               )
                             : SizedBox(
                                 height: Get.height,
                                 child: ListView.builder(
-                                  itemCount: controller.courseListLoading.value
-                                      ? 5
-                                      : controller.courseList.length,
-                                  shrinkWrap: true,
-                                  physics: const NeverScrollableScrollPhysics(),
-                                  itemBuilder: (context, index) {
-                                    final course = controller.courseListLoading.value
-                                        ? null
-                                        : controller.courseList[index];
-                                    return CourseListItem(course: course);
-                                  },
-                                ),
+                                itemCount: courseVM.filteredCourseList.length,
+                                shrinkWrap: true,
+                                physics: const NeverScrollableScrollPhysics(),
+                                itemBuilder: (context, index) {
+                                  final course = courseVM.filteredCourseList[index];
+                                  return CourseListItem(course: course);
+                                },
+                              ),
                               ),
                       ),
                     ),
@@ -214,7 +221,11 @@ class _SelectableCategoryRowState extends State<SelectableCategoryRow> {
         return _buildSelectableContainer(
           text: _categories[index],
           isSelected: _selectedIndex == index,
-          onTap: () => setState(() => _selectedIndex = index),
+          onTap: () {
+            setState((){
+              _selectedIndex = index;
+            });
+          },
         );
       }),
     );
@@ -250,13 +261,13 @@ class _SelectableCategoryRowState extends State<SelectableCategoryRow> {
 class CourseListItem extends StatelessWidget {
   final dynamic course;
 
-  const CourseListItem({Key? key, this.course}) : super(key: key);
+  const CourseListItem({super.key, this.course});
 
   @override
   Widget build(BuildContext context) {
     return Container(
       padding: const EdgeInsets.all(12),
-      margin: const EdgeInsets.only(bottom: 12),
+      margin: const EdgeInsets.only(bottom: 16),
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(16),
         color: AppColor.kwhite,
@@ -264,16 +275,19 @@ class CourseListItem extends StatelessWidget {
           BoxShadow(
             color: Colors.black.withOpacity(0.1),
             blurRadius: 10,
+            blurStyle: BlurStyle.outer,
             offset: const Offset(0, 5),
           ),
         ],
       ),
       child: ListTile(
+        contentPadding: EdgeInsets.zero,
+      minVerticalPadding: 0,
         leading: Image.network(
           course?.imageUrl ?? 'https://placeholder.com/70x90',
-          height: 90,
-          width: 70,
-          fit: BoxFit.fill,
+          height: 100,
+          width: 100,
+          fit: BoxFit.contain,
         ),
         title: Text(
           course?.courseName ?? 'Course Name',
@@ -304,7 +318,7 @@ class CourseListItem extends StatelessWidget {
             Row(
               children: [
                 Text(
-                  course?.price ?? '\$XX.XX',
+                  course?.price ?? '\$120',
                   style: const TextStyle(
                     fontSize: 16,
                     fontWeight: FontWeight.w700,
@@ -319,7 +333,7 @@ class CourseListItem extends StatelessWidget {
                   ),
                   padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
                   child: Text(
-                    course?.duration ?? 'X weeks',
+                    course?.duration ?? '0 weeks',
                     style: const TextStyle(
                       fontSize: 10,
                       fontWeight: FontWeight.w400,

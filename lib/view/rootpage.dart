@@ -3,9 +3,10 @@ import 'package:digitalsalt_assignment/res/app_colors/colors.dart';
 import 'package:digitalsalt_assignment/res/icons_asset/images.dart';
 import 'package:digitalsalt_assignment/view/account/account.dart';
 import 'package:digitalsalt_assignment/view/course/course.dart';
+import 'package:digitalsalt_assignment/view/course/search_result_page.dart';
 import 'package:digitalsalt_assignment/view/home/homepage.dart';
 import 'package:digitalsalt_assignment/view/message/message.dart';
-import 'package:digitalsalt_assignment/view/search/search.dart';
+import 'package:digitalsalt_assignment/view_model/controller/courses_view_model.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_svg/svg.dart';
@@ -23,6 +24,8 @@ class RootPage extends StatefulWidget {
 }
 
 class _RootPageState extends State<RootPage> {
+  final CourseViewModel courseVM = Get.put(CourseViewModel());
+
   int _selectedIndex = 0;
   int parentID = 0;
 
@@ -151,7 +154,7 @@ class _RootPageState extends State<RootPage> {
             child: FloatingActionButton(
                
               onPressed: () {
-                Get.to(() => const SearchPage());
+                Get.to(() =>  SearchResultsPage(controller: courseVM));
               },
               backgroundColor: const Color(0xfff5f7ff),
               elevation: 0,

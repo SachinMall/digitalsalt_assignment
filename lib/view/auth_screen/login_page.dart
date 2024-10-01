@@ -1,4 +1,5 @@
 import 'dart:developer';
+import 'package:digitalsalt_assignment/model/user_mode.dart';
 import 'package:digitalsalt_assignment/res/app_colors/colors.dart';
 import 'package:digitalsalt_assignment/res/icons_asset/images.dart';
 import 'package:digitalsalt_assignment/utils/utils.dart';
@@ -7,6 +8,8 @@ import 'package:digitalsalt_assignment/view/common_widgets/common_buttons.dart';
 import 'package:digitalsalt_assignment/view/common_widgets/common_popups.dart';
 import 'package:digitalsalt_assignment/view/common_widgets/custom_textfield.dart';
 import 'package:digitalsalt_assignment/view/rootpage.dart';
+import 'package:digitalsalt_assignment/view_model/auth_view_model.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:gap/gap.dart';
@@ -20,7 +23,9 @@ class LogInPage extends StatefulWidget {
 }
 
 class _LogInPageState extends State<LogInPage> {
-  // final authVM = Get.put(AuthViewModel());
+  final AuthViewModel _authViewModel = Get.find<AuthViewModel>();
+  ValueNotifier userCredential = ValueNotifier('');
+
   final _formKey = GlobalKey<FormState>();
 
   final TextEditingController _loginEmailController = TextEditingController();
@@ -127,12 +132,19 @@ class _LogInPageState extends State<LogInPage> {
               ),
               const Gap(12),
               PrimaryButton(
-                  onTap: () {
+                  onTap: () async {
+                    log('Log in button tapped');
                     if (_formKey.currentState!.validate()) {
-                      Get.to(() => const RootPage());
-                      showSuccessPopup(context);
-                      // Utils.snackBar('Success', 'Log In successfully');
-                      log('Login account with email: ${_loginEmailController.text}');
+                      UserModel? user =
+                          await _authViewModel.signInWithEmailPassword(
+                        _loginEmailController.text,
+                        _loginPasswordController.text,
+                      );
+                      if (user != null) {
+                        Get.to(() => const RootPage());
+                        // ignore: use_build_context_synchronously
+                        showSuccessPopup(context);
+                      }
                     }
                   },
                   title: 'Log In'),
@@ -196,7 +208,12 @@ class _LogInPageState extends State<LogInPage> {
                 children: [
                   GestureDetector(
                     onTap: () async {
-                      // await authVM.signInWithGoogle();
+                      UserModel? user = await _authViewModel.signInWithGoogle();
+                    if (user != null) {
+                      Get.to(() => const RootPage());
+                      // ignore: use_build_context_synchronously
+                      showSuccessPopup(context);
+                    }
                     },
                     child: SvgPicture.asset(
                       IconAssets.googleIcon,
@@ -234,5 +251,30 @@ class _LogInPageState extends State<LogInPage> {
         );
       },
     );
+  }
+
+  Future<UserModel?> signInWithEmailPassword(
+      String email, String password) async {
+    try {
+      UserCredential userCredential =
+          await FirebaseAuth.instance.signInWithEmailAndPassword(
+        email: email,
+        password: password,
+      );
+
+      User? user = userCredential.user;
+      if (user != null) {
+        return UserModel(
+          email: user.email ?? '',
+          firstName: '',
+          lastName: '',
+        );
+      }
+    } on FirebaseAuthException catch (e) {
+      log('Error signing in: $e');
+
+      Utils.toastMessage(e.message ?? 'Login failed');
+    }
+    return null;
   }
 }
